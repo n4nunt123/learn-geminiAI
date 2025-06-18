@@ -2,7 +2,8 @@ const express = require('express');
 const multer = require('multer');
 
 const {
-  generateContentText
+  generateContentText,
+  generateContentTextWithFile
 } = require('./generateContent');
 
 const app = express();
@@ -14,13 +15,15 @@ app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
-app.post('/content-text', async (req, res) => {
+app.post('/generate-content-text', async (req, res) => {
   const { prompt } = req.body;
   if (!prompt) {
+    console.log('prompt is required');
     return res.status(400).json({ error: 'prompt is required' });
   }
 
   try {
+    console.log('generating content');
     const content = await generateContentText(prompt);
     res.json({ output: content });
   } catch (error) {
@@ -29,9 +32,24 @@ app.post('/content-text', async (req, res) => {
   }
 });
 
-app.post('/content-text-image', upload.single('image'), async (req, res) => {
-  const { prompt } = req.body;
-  const image = req.file;
+app.post('/generate-content-text-image', upload.single('image'), async (req, res) => {
+  const {
+    body: { prompt }, file
+  } = req;
+  if (!prompt || !file) {
+    console.log('prompt is required and file must be uploaded');
+    return res.status(400).json({ error: 'prompt is required' });
+  }
+  
+  try {
+    console.log('generating content');
+    const content = await generateContentTextWithFile(prompt, file);
+    res.json({ output: content });
+    res.send('OK')
+  } catch (error) {
+    console.error('Error generating content:', error);
+    res.status(500).json({ error: 'Failed to generate content' });
+  }
 });
 
 module.exports = app;
