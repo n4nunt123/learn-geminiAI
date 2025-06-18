@@ -9,4 +9,16 @@ const generateContentText = async (question) => {
   return response.text;
 }
 
-module.exports = generateContentText;
+const generateContentTextWithImage = async (question, image) => {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: question,
+    image: image,
+  });
+
+  return response.text;
+};
+
+module.exports = {
+  generateContentText, generateContentTextWithImage
+};
