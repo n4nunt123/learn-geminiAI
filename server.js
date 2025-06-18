@@ -77,4 +77,26 @@ app.post('/generate-content-text-document', upload.single('document'), async (re
   }
 });
 
+app.post('/generate-content-text-image', upload.single('image'), async (req, res) => {
+  const {
+    body: { prompt }, file
+  } = req;
+  if (!prompt || !file) {
+    console.log('prompt is required and file must be uploaded');
+    return res.status(400).json({ error: 'prompt is required' });
+  }
+  
+  try {
+    console.log('generating content');
+    const content = await generateContentTextWithFile(prompt, file);
+    res.json({ output: content });
+    res.send('OK')
+  } catch (error) {
+    console.error('Error generating content:', error);
+    res.status(500).json({ error: 'Failed to generate content' });
+  } finally {
+    fs.unlinkSync(req.file.path);
+  }
+});
+
 module.exports = app;
