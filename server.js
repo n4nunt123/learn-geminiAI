@@ -33,7 +33,7 @@ app.post('/generate-content-text', async (req, res) => {
   }
 });
 
-app.post('/generate-content-text-image', upload.single('image'), async (req, res) => {
+app.post('/generate-content-from-image', upload.single('image'), async (req, res) => {
   const {
     body: { prompt }, file
   } = req;
@@ -46,7 +46,6 @@ app.post('/generate-content-text-image', upload.single('image'), async (req, res
     console.log('generating content');
     const content = await generateContentTextWithFile(prompt, file);
     res.json({ output: content });
-    res.send('OK')
   } catch (error) {
     console.error('Error generating content:', error);
     res.status(500).json({ error: 'Failed to generate content' });
@@ -55,7 +54,7 @@ app.post('/generate-content-text-image', upload.single('image'), async (req, res
   }
 });
 
-app.post('/generate-content-text-document', upload.single('document'), async (req, res) => {
+app.post('/generate-content-from-document', upload.single('document'), async (req, res) => {
   const {
     body: { prompt }, file
   } = req;
@@ -68,7 +67,6 @@ app.post('/generate-content-text-document', upload.single('document'), async (re
     console.log('generating content');
     const content = await generateContentTextWithFile(prompt, file);
     res.json({ output: content });
-    res.send('OK')
   } catch (error) {
     console.error('Error generating content:', error);
     res.status(500).json({ error: 'Failed to generate content' });
@@ -77,7 +75,7 @@ app.post('/generate-content-text-document', upload.single('document'), async (re
   }
 });
 
-app.post('/generate-content-text-image', upload.single('image'), async (req, res) => {
+app.post('/generate-content-from-audio', upload.single('audio'), async (req, res) => {
   const {
     body: { prompt }, file
   } = req;
@@ -90,7 +88,6 @@ app.post('/generate-content-text-image', upload.single('image'), async (req, res
     console.log('generating content');
     const content = await generateContentTextWithFile(prompt, file);
     res.json({ output: content });
-    res.send('OK')
   } catch (error) {
     console.error('Error generating content:', error);
     res.status(500).json({ error: 'Failed to generate content' });
