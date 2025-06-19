@@ -7,6 +7,7 @@ const {
   generateContentTextWithFile,
   generateContentImage
 } = require('./generateContent');
+const { isMissingValue } = require('./utils')
 
 const app = express();
 const port = 3000;
@@ -19,10 +20,7 @@ app.listen(port, () => {
 
 app.post('/generate-content-text', async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) {
-    console.log('prompt is required');
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  isMissingValue(prompt, 'prompt');
 
   try {
     console.log('generating content');
@@ -30,6 +28,10 @@ app.post('/generate-content-text', async (req, res) => {
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   }
 });
@@ -38,10 +40,8 @@ app.post('/generate-content-from-image', upload.single('image'), async (req, res
   const {
     body: { prompt }, file
   } = req;
-  if (!prompt || !file) {
-    console.log('prompt is required and file must be uploaded');
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  isMissingValue(prompt, 'prompt');
+  isMissingValue(file, 'file');
   
   try {
     console.log('generating content');
@@ -49,6 +49,10 @@ app.post('/generate-content-from-image', upload.single('image'), async (req, res
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   } finally {
     fs.unlinkSync(req.file.path);
@@ -59,10 +63,8 @@ app.post('/generate-content-from-document', upload.single('document'), async (re
   const {
     body: { prompt }, file
   } = req;
-  if (!prompt || !file) {
-    console.log('prompt is required and file must be uploaded');
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  isMissingValue(prompt, 'prompt');
+  isMissingValue(prompt, 'file');
   
   try {
     console.log('generating content');
@@ -70,6 +72,10 @@ app.post('/generate-content-from-document', upload.single('document'), async (re
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   } finally {
     fs.unlinkSync(req.file.path);
@@ -80,10 +86,8 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
   const {
     body: { prompt }, file
   } = req;
-  if (!prompt || !file) {
-    console.log('prompt is required and file must be uploaded');
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  isMissingValue(prompt, 'prompt');
+  isMissingValue(prompt, 'file');
   
   try {
     console.log('generating content');
@@ -91,6 +95,10 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   } finally {
     fs.unlinkSync(req.file.path);
@@ -99,10 +107,7 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
 
 app.post('/generate-content-image', async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) {
-    console.log('prompt is required');
-    return res.status(400).json({ error: 'prompt is required' });
-  }
+  isMissingValue(prompt, 'prompt');
 
   try {
     console.log('generating image content');
@@ -110,6 +115,10 @@ app.post('/generate-content-image', async (req, res) => {
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   }
 });
