@@ -1,11 +1,11 @@
-const { createUserContent } = require("@google/genai");
-const fs = require("fs");
+const { createUserContent, Modality } = require('@google/genai');
+const fs = require('fs');
 
-const ai = require("./model.js");
+const ai = require('./model.js');
 
 const generateContentText = async (question) => {
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: 'gemini-2.0-flash',
     contents: question,
   });
   
@@ -19,7 +19,7 @@ const generateContentTextWithFile = async (prompt, file) => {
   };
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: 'gemini-2.0-flash',
     contents: [
       createUserContent([
         { inlineData },
@@ -30,6 +30,20 @@ const generateContentTextWithFile = async (prompt, file) => {
 
   return response.text;
 };
+
+const generateContentImage = async (prompt) => {
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash-preview-image-generation',
+    contents,
+    config: {
+      responseModalities: [Modality.TEXT, Modality.IMAGE]
+    }
+  });
+
+  console.log(response)
+}
+
+(async () => await generateContentImage('A knight with his great sword, standing grieving over his fallen comrades in the battlefield'))();
 
 module.exports = {
   generateContentText, generateContentTextWithFile
