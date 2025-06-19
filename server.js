@@ -95,6 +95,10 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   } finally {
     fs.unlinkSync(req.file.path);
@@ -111,6 +115,10 @@ app.post('/generate-content-image', async (req, res) => {
     res.json({ output: content });
   } catch (error) {
     console.error('Error generating content:', error);
+
+    if (error.code === 'MISSING_VALUE') {
+      return res.status(400).json({ error: error.message });
+    }
     res.status(500).json({ error: 'Failed to generate content' });
   }
 });
