@@ -96,4 +96,12 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
   }
 });
 
+app.post('/generate-content-image', async (req, res) => {
+  const { prompt } = req.body;
+  if (!prompt) {
+    console.log('prompt is required');
+    return res.status(400).json({ error: 'prompt is required' });
+  }
+});
+
 module.exports = app;
