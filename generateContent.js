@@ -1,11 +1,11 @@
-const { createUserContent } = require("@google/genai");
-const fs = require("fs");
+const { createUserContent, Modality } = require('@google/genai');
+const fs = require('fs');
 
-const ai = require("./model.js");
+const ai = require('./model.js');
 
 const generateContentText = async (question) => {
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: 'gemini-2.0-flash',
     contents: question,
   });
   
@@ -19,7 +19,7 @@ const generateContentTextWithFile = async (prompt, file) => {
   };
 
   const response = await ai.models.generateContent({
-    model: "gemini-2.0-flash",
+    model: 'gemini-2.0-flash',
     contents: [
       createUserContent([
         { inlineData },
@@ -31,6 +31,30 @@ const generateContentTextWithFile = async (prompt, file) => {
   return response.text;
 };
 
+const generateContentImage = async (prompt) => {
+  const response = await ai.models.generateContent({
+    model: 'gemini-2.0-flash-preview-image-generation',
+    contents: prompt,
+    config: {
+      responseModalities: [Modality.TEXT, Modality.IMAGE]
+    }
+  });
+
+  for (const part of response.candidates[0].content.parts) {
+    if (part.text) console.log(`reponse text: ${part.text}`);
+
+    if (part.inlineData) {
+      const imageData = part.inlineData.data;
+      const buffer = Buffer.from(imageData, 'base64');
+      const filePath = `./images/output-generated-genAI-${Date.now()}.png`;
+
+      console.log(`Saving image to ${filePath}`);
+      fs.writeFileSync(filePath, buffer);
+      return `Image saved to ${filePath}`;
+    }
+  }
+}
+
 module.exports = {
-  generateContentText, generateContentTextWithFile
+  generateContentText, generateContentTextWithFile, generateContentImage
 };
