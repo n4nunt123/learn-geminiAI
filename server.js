@@ -22,11 +22,6 @@ app.post('/generate-content-text', async (req, res) => {
   const { prompt } = req.body;
   isMissingValue(prompt, 'prompt');
 
-  // if (!prompt) {
-  //   console.log('prompt is required');
-  //   return res.status(400).json({ error: 'prompt is required' });
-  // }
-
   try {
     console.log('generating content');
     const content = await generateContentText(prompt);
@@ -47,11 +42,6 @@ app.post('/generate-content-from-image', upload.single('image'), async (req, res
   } = req;
   isMissingValue(prompt, 'prompt');
   isMissingValue(file, 'file');
-
-  // if (!prompt || !file) {
-  //   console.log('prompt is required and file must be uploaded');
-  //   return res.status(400).json({ error: 'prompt is required' });
-  // }
   
   try {
     console.log('generating content');
@@ -72,11 +62,6 @@ app.post('/generate-content-from-document', upload.single('document'), async (re
   isMissingValue(prompt, 'prompt');
   isMissingValue(prompt, 'file');
   
-  // if (!prompt || !file) {
-  //   console.log('prompt is required and file must be uploaded');
-  //   return res.status(400).json({ error: 'prompt is required' });
-  // }
-  
   try {
     console.log('generating content');
     const content = await generateContentTextWithFile(prompt, file);
@@ -96,11 +81,6 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
   isMissingValue(prompt, 'prompt');
   isMissingValue(prompt, 'file');
   
-  // if (!prompt || !file) {
-  //   console.log('prompt is required and file must be uploaded');
-  //   return res.status(400).json({ error: 'prompt is required' });
-  // }
-  
   try {
     console.log('generating content');
     const content = await generateContentTextWithFile(prompt, file);
@@ -116,11 +96,6 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
 app.post('/generate-content-image', async (req, res) => {
   const { prompt } = req.body;
   isMissingValue(prompt, 'prompt');
-
-  // if (!prompt) {
-  //   console.log('prompt is required');
-  //   return res.status(400).json({ error: 'prompt is required' });
-  // }
 
   try {
     console.log('generating image content');
