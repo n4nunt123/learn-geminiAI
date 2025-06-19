@@ -4,7 +4,8 @@ const fs = require('fs');
 
 const {
   generateContentText,
-  generateContentTextWithFile
+  generateContentTextWithFile,
+  generateContentImage
 } = require('./generateContent');
 
 const app = express();
@@ -101,6 +102,15 @@ app.post('/generate-content-image', async (req, res) => {
   if (!prompt) {
     console.log('prompt is required');
     return res.status(400).json({ error: 'prompt is required' });
+  }
+
+  try {
+    console.log('generating image content');
+    const content = await generateContentImage(prompt);
+    res.json({ output: content });
+  } catch (error) {
+    console.error('Error generating content:', error);
+    res.status(500).json({ error: 'Failed to generate content' });
   }
 });
 
