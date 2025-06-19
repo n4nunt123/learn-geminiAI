@@ -3,7 +3,8 @@ const NOP = () => {};
 const isMissingValue = (val, valName) => {
   if (val === null || typeof val === 'undefined') {
     throw new Error({
-      message: `Variable "${valName}" is missing (null or undefined)`
+      message: `Variable "${valName}" is missing (null or undefined)`,
+      code: 'MISSING_VALUE'
     });
   }
   return NOP;
