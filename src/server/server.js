@@ -6,8 +6,9 @@ const {
   generateContentText,
   generateContentTextWithFile,
   generateContentImage
-} = require('./generateContent');
-const { isMissingValue } = require('./utils')
+} = require('../service');
+const { isMissingValue, log } = require('../utils')
+const ai = require('../model')
 
 const app = express();
 const port = 3000;
@@ -15,7 +16,7 @@ app.use(express.json());
 const upload = multer({ dest: 'uploads/' });
 
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  log(`Server is running on http://localhost:${port}`);
 });
 
 app.post('/generate-content-text', async (req, res) => {
@@ -23,11 +24,12 @@ app.post('/generate-content-text', async (req, res) => {
   isMissingValue(prompt, 'prompt');
 
   try {
-    console.log('generating content');
-    const content = await generateContentText(prompt);
+    log('generating content');
+    const content = await generateContentText({ prompt, ai});
+
     res.json({ output: content });
   } catch (error) {
-    console.error('Error generating content:', error);
+    log('Error generating content:', error, 'error');
 
     if (error.code === 'MISSING_VALUE') {
       return res.status(400).json({ error: error.message });
@@ -44,11 +46,14 @@ app.post('/generate-content-from-image', upload.single('image'), async (req, res
   isMissingValue(file, 'file');
   
   try {
-    console.log('generating content');
-    const content = await generateContentTextWithFile(prompt, file);
+    log('generating content');
+    const content = await generateContentTextWithFile({
+      prompt, file, ai
+    });
+
     res.json({ output: content });
   } catch (error) {
-    console.error('Error generating content:', error);
+    log('Error generating content:', error, 'error');
 
     if (error.code === 'MISSING_VALUE') {
       return res.status(400).json({ error: error.message });
@@ -67,11 +72,14 @@ app.post('/generate-content-from-document', upload.single('document'), async (re
   isMissingValue(prompt, 'file');
   
   try {
-    console.log('generating content');
-    const content = await generateContentTextWithFile(prompt, file);
+    log('generating content');
+    const content = await generateContentTextWithFile({
+      prompt, file, ai
+    });
+
     res.json({ output: content });
   } catch (error) {
-    console.error('Error generating content:', error);
+    log('Error generating content:', error, 'error');
 
     if (error.code === 'MISSING_VALUE') {
       return res.status(400).json({ error: error.message });
@@ -90,11 +98,14 @@ app.post('/generate-content-from-audio', upload.single('audio'), async (req, res
   isMissingValue(prompt, 'file');
   
   try {
-    console.log('generating content');
-    const content = await generateContentTextWithFile(prompt, file);
+    log('generating content');
+    const content = await generateContentTextWithFile({
+      prompt, file, ai
+    });
+
     res.json({ output: content });
   } catch (error) {
-    console.error('Error generating content:', error);
+    log('Error generating content:', error, 'error');
 
     if (error.code === 'MISSING_VALUE') {
       return res.status(400).json({ error: error.message });
@@ -110,11 +121,14 @@ app.post('/generate-content-image', async (req, res) => {
   isMissingValue(prompt, 'prompt');
 
   try {
-    console.log('generating image content');
-    const content = await generateContentImage(prompt);
+    log('generating image content');
+    const content = await generateContentImage({
+      prompt, ai
+    });
+
     res.json({ output: content });
   } catch (error) {
-    console.error('Error generating content:', error);
+    log('Error generating content:', error, 'error');
 
     if (error.code === 'MISSING_VALUE') {
       return res.status(400).json({ error: error.message });
