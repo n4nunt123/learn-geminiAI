@@ -7,7 +7,7 @@ const isMissingValue = (val, valName) => {
       code: 'MISSING_VALUE'
     });
   }
-  return NOP;
+  return NOP();
 };
 
 module.exports = { NOP, isMissingValue };
