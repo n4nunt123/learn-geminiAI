@@ -9,11 +9,15 @@ const {
 } = require('../service');
 const { isMissingValue, log } = require('../utils');
 const ai = require('../model');
+const config = require('../../config');
+const createConnectionDb = require('../factories/databaseFactories');
 
 const app = express();
 const port = 3000;
 app.use(express.json());
 const upload = multer({ dest: 'uploads/' });
+
+const { chatHistoryConnector } = createConnectionDb(config.database);
 
 app.listen(port, () => {
   log(`Server is running on http://localhost:${port}`);
