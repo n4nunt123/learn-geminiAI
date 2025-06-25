@@ -26,4 +26,10 @@ describe('#conditionalUtil', () => {
 
     expect(result).toEqual(resultNOP);
   });
+
+  it('should throw error when vav is null and isMissingValue is invoked', () => {
+    const valNull = null;
+
+    expect(() => isMissingValue(valNull, valName)).toThrow(error);
+  });
 });
