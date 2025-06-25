@@ -7,8 +7,8 @@ const {
   generateContentTextWithFile,
   generateContentImage
 } = require('../service');
-const { isMissingValue, log } = require('../utils')
-const ai = require('../model')
+const { isMissingValue, log } = require('../utils');
+const ai = require('../model');
 
 const app = express();
 const port = 3000;
