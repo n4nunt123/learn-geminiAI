@@ -1,4 +1,4 @@
-const chatHistoryConnector = require('./chatHistoryConnector');
+const chatHistoryConnector = require('./ChatHistoryConnector');
 
 describe('#chatHistoryConnector', () => {
   const db = {
