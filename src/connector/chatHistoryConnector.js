@@ -1,4 +1,4 @@
-const { isMissingValue } = require('../utils')
+const { isMissingValue, log } = require('../utils');
 
 /**
  * Chat History Connector
@@ -11,6 +11,18 @@ class ChatHistoryConnector {
     isMissingValue(options.db);
 
     Object.assign(this, options);
+  }
+
+  async getById(id) {
+    try {
+      const query = { id };
+      const users = await this.db.find(query);
+
+      return users;
+    } catch (error) {
+      log('Error fetching users:', error, 'error');
+      throw error;
+    }
   }
 }
 
